@@ -113,8 +113,13 @@ function handleInitialize(req, res) {
   res.json({
     protocolVersion: "2024-11-05",
     capabilities: {
-      tools: {},
-      resources: {},
+      tools: {
+        listChanged: true
+      },
+      resources: {
+        subscribe: true,
+        listChanged: true
+      },
       prompts: {}
     },
     serverInfo: {
