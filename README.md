@@ -1,10 +1,17 @@
-# Railway MCP Server for Lovable
+# Unified MCP Server for Lovable
 
-A dedicated Model Context Protocol (MCP) server hosted on Railway, designed to provide custom components and tools for Lovable development.
+A centralized Model Context Protocol (MCP) server hosted on Railway that combines multiple MCP providers in one place. Currently includes **Magic UI** and **Custom Components** - easily extensible to add more!
 
 ## 🎯 Purpose
 
-This server hosts MCP servers that can be attached to Lovable, ensuring you always use the components you want during development. It provides a centralized component library and tools that Lovable's AI can access.
+This is a **unified MCP server** that hosts multiple MCP providers, giving you a single endpoint to access all your component libraries and tools. Perfect for Lovable development where you want consistent access to Magic UI components and your custom components.
+
+### Why Unified?
+
+- **Single Connection**: Connect once to Lovable, access all your MCP servers
+- **Easy Management**: All MCP servers in one codebase
+- **Extensible**: Add new MCP providers easily with the modular architecture
+- **Always Available**: Railway keeps it running 24/7
 
 ## 🚀 Quick Start
 
@@ -76,19 +83,41 @@ The server will run on `http://localhost:4001` (or the port specified in `PORT` 
 
 ## 🛠️ Available Tools
 
-### 1. `get_component`
-Retrieve a specific component from your component library.
+### Magic UI Tools
+
+#### 1. `magicui_get_component`
+Get a Magic UI component by name (e.g., 'marquee', 'blur-fade', 'grid-background').
+
+**Parameters:**
+- `componentName` (string, required): Name of the Magic UI component
+
+#### 2. `magicui_list_components`
+List all available Magic UI components.
+
+**Parameters:**
+- `category` (string, optional): Filter by category (e.g., 'animations', 'effects', 'layouts')
+
+#### 3. `magicui_search_components`
+Search Magic UI components by keyword.
+
+**Parameters:**
+- `query` (string, required): Search query
+
+### Custom Component Tools
+
+#### 1. `get_component`
+Retrieve a specific component from your custom component library.
 
 **Parameters:**
 - `componentName` (string, required): Name of the component
 
-### 2. `list_components`
-List all available components in your library.
+#### 2. `list_components`
+List all available components in your custom library.
 
 **Parameters:**
 - `category` (string, optional): Filter by category
 
-### 3. `create_component`
+#### 3. `create_component`
 Create a new component and add it to your library.
 
 **Parameters:**
@@ -98,24 +127,54 @@ Create a new component and add it to your library.
 
 ## 📦 Available Resources
 
+### Magic UI Resources
+- `magicui://marquee` - Animated marquee component
+- `magicui://blur-fade` - Blur fade text animation
+- `magicui://grid-background` - Animated grid background
+- `magicui://shimmer` - Shimmer loading effect
+- `magicui://animated-beam` - Animated beam connector
+
+### Custom Component Resources
 - `component://button` - Button component
 - `component://card` - Card component
 
 ## 🔧 Customization
 
-### Adding Your Own Components
+### Adding a New MCP Provider
 
-1. **Modify the component storage:**
-   - Currently uses placeholder data
-   - Implement actual storage (database, file system, etc.) in `server.mjs`
+The server uses a modular architecture, making it easy to add new MCP providers:
 
-2. **Add new tools:**
-   - Edit the `/mcp/tools/list` endpoint to add tool definitions
-   - Implement the tool logic in `/mcp/tools/call`
+1. **Create a new provider file** in `mcp-providers/`:
+   ```javascript
+   // mcp-providers/my-provider.mjs
+   export const myProviderTools = [/* tool definitions */];
+   export const myProviderResources = [/* resource definitions */];
+   export async function handleMyProviderTool(name, args) { /* ... */ }
+   export async function handleMyProviderResource(uri) { /* ... */ }
+   ```
 
-3. **Add new resources:**
-   - Edit the `/mcp/resources/list` endpoint
-   - Implement resource retrieval in `/mcp/resources/read`
+2. **Import and register in `server.mjs`**:
+   ```javascript
+   import { myProviderTools, ... } from "./mcp-providers/my-provider.mjs";
+   ```
+
+3. **Merge into unified endpoints**:
+   - Add tools to the `allTools` array in `/mcp/tools/list`
+   - Add resources to the `allResources` array in `/mcp/resources/list`
+   - Route tool calls in `/mcp/tools/call`
+   - Route resource reads in `/mcp/resources/read`
+
+### Customizing Existing Providers
+
+#### Magic UI Provider
+- Edit `mcp-providers/magic-ui.mjs`
+- Currently uses placeholder data - integrate with Magic UI's actual API/component library
+- Visit [magicui.design](https://magicui.design) for component documentation
+
+#### Custom Components Provider
+- Edit `mcp-providers/custom-components.mjs`
+- Implement actual storage (database, file system, etc.)
+- Add your component library logic
 
 ### Environment Variables
 
@@ -125,12 +184,23 @@ Create a new component and add it to your library.
 
 ```
 railway-mcp-test/
-├── server.mjs          # Main MCP server implementation
-├── package.json        # Dependencies and scripts
-├── railway.json        # Railway deployment configuration
-├── .gitignore         # Git ignore rules
-└── README.md          # This file
+├── server.mjs                    # Main unified MCP server
+├── mcp-providers/                # Modular MCP provider modules
+│   ├── magic-ui.mjs             # Magic UI MCP provider
+│   └── custom-components.mjs     # Custom components provider
+├── package.json                 # Dependencies and scripts
+├── railway.json                 # Railway deployment configuration
+├── .gitignore                   # Git ignore rules
+└── README.md                    # This file
 ```
+
+### Architecture
+
+The server uses a **modular provider architecture**:
+- Each MCP server is a separate module in `mcp-providers/`
+- The main server (`server.mjs`) merges all providers
+- Tools and resources from all providers are unified into single endpoints
+- Easy to add new providers without modifying core server code
 
 ## 🔒 Security Notes
 
@@ -141,10 +211,12 @@ railway-mcp-test/
 
 ## 📝 Next Steps
 
-1. **Implement persistent storage** for components (database or file system)
-2. **Add authentication** if you need to restrict access
-3. **Customize tools and resources** for your specific component library
-4. **Add logging and monitoring** for production use
+1. **Integrate Magic UI's actual component library** - Currently uses placeholders
+2. **Implement persistent storage** for custom components (database or file system)
+3. **Add more MCP providers** - Extend with other component libraries or tools
+4. **Add authentication** if you need to restrict access
+5. **Add logging and monitoring** for production use
+6. **Set up component caching** for better performance
 
 ## 🆘 Troubleshooting
 

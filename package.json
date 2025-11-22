@@ -8,7 +8,8 @@
     "start": "node server.mjs"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "cors": "^2.8.5"
+    "@magicuidesign/mcp": "^1.0.6",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
   }
 }

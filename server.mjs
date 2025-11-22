@@ -1,6 +1,20 @@
 import express from "express";
 import cors from "cors";
 
+// Import MCP providers
+import { 
+  magicUITools, 
+  magicUIResources, 
+  handleMagicUITool, 
+  handleMagicUIResource 
+} from "./mcp-providers/magic-ui.mjs";
+import { 
+  customComponentTools, 
+  customComponentResources, 
+  handleCustomComponentTool, 
+  handleCustomComponentResource 
+} from "./mcp-providers/custom-components.mjs";
+
 const app = express();
 
 // Enable CORS for external access (Lovable needs this)
@@ -14,6 +28,7 @@ app.use(express.json());
 
 // MCP Protocol Implementation
 // This follows the Model Context Protocol specification
+// Unified server that merges multiple MCP providers
 
 // Initialize endpoint - called when client connects
 app.post("/mcp/initialize", (req, res) => {
@@ -27,125 +42,53 @@ app.post("/mcp/initialize", (req, res) => {
       prompts: {}
     },
     serverInfo: {
-      name: "railway-mcp-server",
-      version: "1.0.0"
+      name: "unified-mcp-server",
+      version: "1.0.0",
+      providers: ["magic-ui", "custom-components"]
     }
   });
 });
 
-// List available tools
+// List available tools - merges tools from all providers
 app.post("/mcp/tools/list", (req, res) => {
+  // Merge tools from all MCP providers
+  const allTools = [
+    ...magicUITools,
+    ...customComponentTools
+  ];
+  
   res.json({
-    tools: [
-      {
-        name: "get_component",
-        description: "Retrieve a specific component from the component library",
-        inputSchema: {
-          type: "object",
-          properties: {
-            componentName: {
-              type: "string",
-              description: "The name of the component to retrieve"
-            }
-          },
-          required: ["componentName"]
-        }
-      },
-      {
-        name: "list_components",
-        description: "List all available components in the library",
-        inputSchema: {
-          type: "object",
-          properties: {
-            category: {
-              type: "string",
-              description: "Optional category filter"
-            }
-          }
-        }
-      },
-      {
-        name: "create_component",
-        description: "Create a new component and add it to the library",
-        inputSchema: {
-          type: "object",
-          properties: {
-            name: {
-              type: "string",
-              description: "Component name"
-            },
-            code: {
-              type: "string",
-              description: "Component code/implementation"
-            },
-            category: {
-              type: "string",
-              description: "Component category"
-            }
-          },
-          required: ["name", "code"]
-        }
-      }
-    ]
+    tools: allTools
   });
 });
 
-// Call a specific tool
-app.post("/mcp/tools/call", (req, res) => {
+// Call a specific tool - routes to appropriate provider
+app.post("/mcp/tools/call", async (req, res) => {
   const { name, arguments: args } = req.body;
   
   try {
-    switch (name) {
-      case "get_component":
-        // In a real implementation, this would fetch from a database or file system
-        const componentName = args?.componentName || "unknown";
-        return res.json({
-          content: [
-            {
-              type: "text",
-              text: `Component "${componentName}" retrieved. This is a placeholder - implement actual component storage.`
-            }
-          ]
-        });
-        
-      case "list_components":
-        // Return list of available components
-        return res.json({
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                components: [
-                  { name: "Button", category: "ui" },
-                  { name: "Card", category: "ui" },
-                  { name: "Modal", category: "ui" }
-                ]
-              }, null, 2)
-            }
-          ]
-        });
-        
-      case "create_component":
-        const { name: compName, code, category } = args || {};
-        // In production, save this to a database or file system
-        return res.json({
-          content: [
-            {
-              type: "text",
-              text: `Component "${compName}" created successfully. Add persistence logic to save components.`
-            }
-          ]
-        });
-        
-      default:
-        return res.status(400).json({
-          error: {
-            code: -32601,
-            message: `Unknown tool: ${name}`
-          }
-        });
+    let result;
+    
+    // Route to Magic UI provider
+    if (name.startsWith("magicui_")) {
+      result = await handleMagicUITool(name, args);
     }
+    // Route to custom components provider
+    else if (name === "get_component" || name === "list_components" || name === "create_component") {
+      result = await handleCustomComponentTool(name, args);
+    }
+    else {
+      return res.status(400).json({
+        error: {
+          code: -32601,
+          message: `Unknown tool: ${name}`
+        }
+      });
+    }
+    
+    return res.json(result);
   } catch (error) {
+    console.error(`Error calling tool ${name}:`, error);
     return res.status(500).json({
       error: {
         code: -32603,
@@ -155,50 +98,54 @@ app.post("/mcp/tools/call", (req, res) => {
   }
 });
 
-// List available resources
+// List available resources - merges resources from all providers
 app.post("/mcp/resources/list", (req, res) => {
+  // Merge resources from all MCP providers
+  const allResources = [
+    ...magicUIResources,
+    ...customComponentResources
+  ];
+  
   res.json({
-    resources: [
-      {
-        uri: "component://button",
-        name: "Button Component",
-        description: "Reusable button component",
-        mimeType: "text/plain"
-      },
-      {
-        uri: "component://card",
-        name: "Card Component",
-        description: "Reusable card component",
-        mimeType: "text/plain"
-      }
-    ]
+    resources: allResources
   });
 });
 
-// Get a specific resource
-app.post("/mcp/resources/read", (req, res) => {
+// Get a specific resource - routes to appropriate provider
+app.post("/mcp/resources/read", async (req, res) => {
   const { uri } = req.body;
   
-  // In production, fetch actual component code from storage
-  if (uri.startsWith("component://")) {
-    const componentName = uri.replace("component://", "");
-    return res.json({
-      contents: [
-        {
-          uri,
-          mimeType: "text/plain",
-          text: `// ${componentName} component placeholder\n// Implement actual component retrieval here`
-        }
-      ]
+  try {
+    let result;
+    
+    // Try Magic UI provider first
+    result = await handleMagicUIResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try custom components provider
+    result = await handleCustomComponentResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Resource not found in any provider
+    return res.status(404).json({
+      error: {
+        code: -32602,
+        message: `Resource not found: ${uri}`
+      }
+    });
+  } catch (error) {
+    console.error(`Error reading resource ${uri}:`, error);
+    return res.status(500).json({
+      error: {
+        code: -32603,
+        message: error.message
+      }
     });
   }
-  
-  return res.status(404).json({
-    error: {
-      code: -32602,
-      message: `Resource not found: ${uri}`
-    }
-  });
 });
 
 // Health check endpoint
@@ -209,8 +156,22 @@ app.get("/health", (req, res) => {
 // Root endpoint with info
 app.get("/", (req, res) => {
   res.json({
-    service: "MCP Server for Lovable",
+    service: "Unified MCP Server for Lovable",
     version: "1.0.0",
+    providers: [
+      {
+        name: "Magic UI",
+        description: "Magic UI component library integration",
+        tools: magicUITools.length,
+        resources: magicUIResources.length
+      },
+      {
+        name: "Custom Components",
+        description: "Your custom component library",
+        tools: customComponentTools.length,
+        resources: customComponentResources.length
+      }
+    ],
     endpoints: {
       initialize: "POST /mcp/initialize",
       listTools: "POST /mcp/tools/list",
@@ -235,7 +196,10 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 4001;
 app.listen(PORT, () => {
-  console.log(`🚀 MCP Server listening on port ${PORT}`);
+  console.log(`🚀 Unified MCP Server listening on port ${PORT}`);
   console.log(`📡 Ready for Lovable connections`);
+  console.log(`✨ Providers loaded:`);
+  console.log(`   - Magic UI (${magicUITools.length} tools, ${magicUIResources.length} resources)`);
+  console.log(`   - Custom Components (${customComponentTools.length} tools, ${customComponentResources.length} resources)`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 });
