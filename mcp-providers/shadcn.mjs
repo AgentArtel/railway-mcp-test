@@ -80,182 +80,85 @@ export const shadcnTools = [
   }
 ];
 
-// Shadcn UI component resources
-export const shadcnResources = [
-  {
-    uri: "shadcn://button",
-    name: "Button Component",
-    description: "Displays a button or a component that looks like a button",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://card",
-    name: "Card Component",
-    description: "Displays a card with header, content, and footer",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://dialog",
-    name: "Dialog Component",
-    description: "A window overlaid on either the primary window or another dialog",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://dropdown-menu",
-    name: "Dropdown Menu",
-    description: "Displays a menu to the user — such as a set of actions or functions",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://input",
-    name: "Input Component",
-    description: "Displays a form input field or a component that looks like an input field",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://label",
-    name: "Label Component",
-    description: "Renders an accessible label associated with controls",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://select",
-    name: "Select Component",
-    description: "Displays a list of options for the user to pick from",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://textarea",
-    name: "Textarea Component",
-    description: "Displays a form textarea or a component that looks like a textarea",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://checkbox",
-    name: "Checkbox Component",
-    description: "A control that allows the user to toggle between checked and not checked",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://radio-group",
-    name: "Radio Group",
-    description: "A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://switch",
-    name: "Switch Component",
-    description: "A control that allows the user to toggle between checked and not checked",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://table",
-    name: "Table Component",
-    description: "A responsive table component",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://tabs",
-    name: "Tabs Component",
-    description: "A set of layered sections of content—known as tab panels—that are displayed one at a time",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://accordion",
-    name: "Accordion Component",
-    description: "A vertically stacked set of interactive headings that each reveal a section of content",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://alert",
-    name: "Alert Component",
-    description: "Displays a callout for user attention",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://badge",
-    name: "Badge Component",
-    description: "Displays a badge or a component that looks like a badge",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://avatar",
-    name: "Avatar Component",
-    description: "An image element with a fallback for representing the user",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://skeleton",
-    name: "Skeleton Component",
-    description: "Use to show a placeholder while content is loading",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://toast",
-    name: "Toast Component",
-    description: "A succinct message that is displayed temporarily",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "shadcn://tooltip",
-    name: "Tooltip Component",
-    description: "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it",
-    mimeType: "text/plain"
-  }
+// All Shadcn UI components from https://ui.shadcn.com/docs/components
+const allShadcnComponents = [
+  { name: "accordion", category: "layout", description: "A vertically stacked set of interactive headings" },
+  { name: "alert-dialog", category: "overlay", description: "A modal dialog that interrupts the user" },
+  { name: "alert", category: "feedback", description: "Displays a callout for user attention" },
+  { name: "aspect-ratio", category: "layout", description: "Displays content within a desired ratio" },
+  { name: "avatar", category: "display", description: "An image element with a fallback for representing the user" },
+  { name: "badge", category: "display", description: "Displays a badge or a component that looks like a badge" },
+  { name: "breadcrumb", category: "navigation", description: "Displays the path to the current resource" },
+  { name: "button-group", category: "form", description: "A group of buttons" },
+  { name: "button", category: "form", description: "Displays a button or a component that looks like a button" },
+  { name: "calendar", category: "form", description: "A date field component" },
+  { name: "card", category: "layout", description: "Displays a card with header, content, and footer" },
+  { name: "carousel", category: "display", description: "A carousel with motion and swipe built using Embla" },
+  { name: "chart", category: "display", description: "Chart components built with Recharts" },
+  { name: "checkbox", category: "form", description: "A control that allows the user to toggle between checked and not checked" },
+  { name: "collapsible", category: "layout", description: "An interactive component which expands/collapses a panel" },
+  { name: "combobox", category: "form", description: "Combobox component for autocomplete" },
+  { name: "command", category: "navigation", description: "Command palette component" },
+  { name: "context-menu", category: "overlay", description: "Displays a menu to the user" },
+  { name: "data-table", category: "display", description: "A data table component with sorting and filtering" },
+  { name: "date-picker", category: "form", description: "A date picker component" },
+  { name: "dialog", category: "overlay", description: "A window overlaid on either the primary window or another dialog" },
+  { name: "drawer", category: "overlay", description: "A drawer component for mobile" },
+  { name: "dropdown-menu", category: "overlay", description: "Displays a menu to the user — such as a set of actions or functions" },
+  { name: "empty", category: "display", description: "Displays an empty state" },
+  { name: "field", category: "form", description: "A form field component" },
+  { name: "form", category: "form", description: "Form component built on top of React Hook Form" },
+  { name: "hover-card", category: "overlay", description: "For sighted users to preview content available behind a link" },
+  { name: "input-group", category: "form", description: "A group of inputs" },
+  { name: "input-otp", category: "form", description: "Input component for one-time passwords" },
+  { name: "input", category: "form", description: "Displays a form input field or a component that looks like an input field" },
+  { name: "item", category: "display", description: "Item component" },
+  { name: "kbd", category: "display", description: "Keyboard key component" },
+  { name: "label", category: "form", description: "Renders an accessible label associated with controls" },
+  { name: "menubar", category: "navigation", description: "A visually persistent menu common in desktop applications" },
+  { name: "native-select", category: "form", description: "A native select component" },
+  { name: "navigation-menu", category: "navigation", description: "A collection of links for navigating websites" },
+  { name: "pagination", category: "navigation", description: "Pagination component" },
+  { name: "popover", category: "overlay", description: "Displays rich content in a portal" },
+  { name: "progress", category: "feedback", description: "Displays an indicator showing the completion progress of a task" },
+  { name: "radio-group", category: "form", description: "A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked" },
+  { name: "resizable", category: "layout", description: "Accessible resizable panel groups and layouts" },
+  { name: "scroll-area", category: "layout", description: "Augments native scroll functionality for custom styling" },
+  { name: "select", category: "form", description: "Displays a list of options for the user to pick from" },
+  { name: "separator", category: "layout", description: "Visually or semantically separates content" },
+  { name: "sheet", category: "overlay", description: "Extends the Dialog component to display content that complements the main content" },
+  { name: "sidebar", category: "layout", description: "Sidebar component" },
+  { name: "skeleton", category: "feedback", description: "Use to show a placeholder while content is loading" },
+  { name: "slider", category: "form", description: "An input where the user selects a value from within a given range" },
+  { name: "sonner", category: "feedback", description: "Toast notifications (Sonner)" },
+  { name: "spinner", category: "feedback", description: "Spinner loading component" },
+  { name: "switch", category: "form", description: "A control that allows the user to toggle between checked and not checked" },
+  { name: "table", category: "display", description: "A responsive table component" },
+  { name: "tabs", category: "layout", description: "A set of layered sections of content—known as tab panels—that are displayed one at a time" },
+  { name: "textarea", category: "form", description: "Displays a form textarea or a component that looks like a textarea" },
+  { name: "toast", category: "feedback", description: "A succinct message that is displayed temporarily" },
+  { name: "toggle-group", category: "form", description: "A set of two-state buttons that can be toggled on or off" },
+  { name: "toggle", category: "form", description: "A two-state button that can be either on or off" },
+  { name: "tooltip", category: "overlay", description: "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it" },
+  { name: "typography", category: "display", description: "Typography component" }
 ];
 
-// Common shadcn components organized by category
+// Generate resources from all components
+export const shadcnResources = allShadcnComponents.map(comp => ({
+  uri: `shadcn://${comp.name}`,
+  name: comp.name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+  description: comp.description,
+  mimeType: "text/plain"
+}));
+
+// Shadcn components organized by category (for backward compatibility)
 const shadcnComponents = {
-  form: [
-    { name: "button", description: "Button component" },
-    { name: "input", description: "Input field component" },
-    { name: "label", description: "Label component" },
-    { name: "select", description: "Select dropdown component" },
-    { name: "textarea", description: "Textarea component" },
-    { name: "checkbox", description: "Checkbox component" },
-    { name: "radio-group", description: "Radio group component" },
-    { name: "switch", description: "Switch toggle component" },
-    { name: "form", description: "Form component" },
-    { name: "slider", description: "Slider input component" }
-  ],
-  overlay: [
-    { name: "dialog", description: "Modal dialog component" },
-    { name: "dropdown-menu", description: "Dropdown menu component" },
-    { name: "popover", description: "Popover component" },
-    { name: "sheet", description: "Sheet/sidebar component" },
-    { name: "context-menu", description: "Context menu component" },
-    { name: "hover-card", description: "Hover card component" },
-    { name: "menubar", description: "Menubar component" },
-    { name: "navigation-menu", description: "Navigation menu component" }
-  ],
-  layout: [
-    { name: "card", description: "Card container component" },
-    { name: "tabs", description: "Tabs component" },
-    { name: "accordion", description: "Accordion component" },
-    { name: "separator", description: "Separator line component" },
-    { name: "scroll-area", description: "Scrollable area component" },
-    { name: "aspect-ratio", description: "Aspect ratio component" },
-    { name: "resizable", description: "Resizable panel component" }
-  ],
-  feedback: [
-    { name: "alert", description: "Alert message component" },
-    { name: "toast", description: "Toast notification component" },
-    { name: "progress", description: "Progress bar component" },
-    { name: "skeleton", description: "Loading skeleton component" },
-    { name: "sonner", description: "Toast notifications (Sonner)" }
-  ],
-  display: [
-    { name: "avatar", description: "Avatar image component" },
-    { name: "badge", description: "Badge component" },
-    { name: "table", description: "Table component" },
-    { name: "calendar", description: "Calendar component" },
-    { name: "chart", description: "Chart component" }
-  ],
-  navigation: [
-    { name: "breadcrumb", description: "Breadcrumb navigation" },
-    { name: "pagination", description: "Pagination component" },
-    { name: "command", description: "Command palette component" }
-  ]
+  form: allShadcnComponents.filter(c => c.category === "form").map(c => ({ name: c.name, description: c.description })),
+  overlay: allShadcnComponents.filter(c => c.category === "overlay").map(c => ({ name: c.name, description: c.description })),
+  layout: allShadcnComponents.filter(c => c.category === "layout").map(c => ({ name: c.name, description: c.description })),
+  feedback: allShadcnComponents.filter(c => c.category === "feedback").map(c => ({ name: c.name, description: c.description })),
+  display: allShadcnComponents.filter(c => c.category === "display").map(c => ({ name: c.name, description: c.description })),
+  navigation: allShadcnComponents.filter(c => c.category === "navigation").map(c => ({ name: c.name, description: c.description }))
 };
 
 /**
@@ -286,27 +189,21 @@ export async function handleShadcnTool(name, args) {
     
     case "shadcn_list_components": {
       const category = args?.category;
-      let components = [];
+      const filtered = category 
+        ? allShadcnComponents.filter(c => c.category === category)
+        : allShadcnComponents;
       
-      if (category) {
-        // Filter by category
-        if (shadcnComponents[category]) {
-          components = shadcnComponents[category];
-        }
-      } else {
-        // Return all components
-        Object.values(shadcnComponents).forEach(catComponents => {
-          components.push(...catComponents);
-        });
-      }
+      const categories = [...new Set(allShadcnComponents.map(c => c.category))];
       
       return {
         content: [
           {
             type: "text",
             text: JSON.stringify({ 
-              components,
-              categories: Object.keys(shadcnComponents)
+              components: filtered,
+              total: allShadcnComponents.length,
+              categories: categories,
+              filtered: filtered.length
             }, null, 2)
           }
         ]
@@ -315,23 +212,22 @@ export async function handleShadcnTool(name, args) {
     
     case "shadcn_search_components": {
       const query = args?.query?.toLowerCase() || "";
-      const results = [];
-      
-      Object.entries(shadcnComponents).forEach(([cat, comps]) => {
-        comps.forEach(comp => {
-          if (comp.name.toLowerCase().includes(query) || 
-              comp.description.toLowerCase().includes(query) ||
-              cat.toLowerCase().includes(query)) {
-            results.push({ ...comp, category: cat });
-          }
-        });
-      });
+      const results = allShadcnComponents.filter(c => 
+        c.name.toLowerCase().includes(query) || 
+        c.category.toLowerCase().includes(query) ||
+        c.description.toLowerCase().includes(query)
+      );
       
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({ results }, null, 2)
+            text: JSON.stringify({ 
+              results,
+              query,
+              count: results.length,
+              total: allShadcnComponents.length
+            }, null, 2)
           }
         ]
       };

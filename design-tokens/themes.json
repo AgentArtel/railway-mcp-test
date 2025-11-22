@@ -1,0 +1,34 @@
+{
+  "themes": {
+    "default": {
+      "name": "Default",
+      "description": "Modern, clean design system",
+      "styleDomain": "web_premium",
+      "preferredProviders": ["magic-ui", "shadcn", "aceternity-ui"],
+      "colors": "default",
+      "spacing": "default",
+      "typography": "default",
+      "radii": "default",
+      "shadows": "default"
+    },
+    "rpg_8bit": {
+      "name": "RPG 8-Bit",
+      "description": "Retro pixel-art design system for RPG games",
+      "styleDomain": "rpg_8bit",
+      "preferredProviders": ["eightbit"],
+      "colors": "rpg_8bit",
+      "spacing": "rpg_8bit",
+      "typography": "rpg_8bit",
+      "radii": "rpg_8bit",
+      "shadows": "rpg_8bit"
+    }
+  },
+  "providerThemeMapping": {
+    "magic-ui": "default",
+    "shadcn": "default",
+    "aceternity-ui": "default",
+    "eightbit": "rpg_8bit",
+    "custom-components": "default"
+  }
+}
+
