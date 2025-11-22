@@ -78,6 +78,25 @@ app.post("/mcp/initialize", (req, res) => {
   // Check if Bearer token is provided (alternative to OAuth)
   const bearerToken = getBearerToken(req);
   
+  // Build authentication response - support both methods
+  let authResponse;
+  if (bearerToken) {
+    // Bearer token provided - use bearer auth
+    authResponse = {
+      method: "bearer"
+    };
+  } else {
+    // No bearer token - offer OAuth2
+    authResponse = {
+      method: "oauth2",
+      oauth2: {
+        authorizationEndpoint: "/oauth2/authorize",
+        tokenEndpoint: "/oauth2/token",
+        scopes: ["mcp:read", "mcp:write"]
+      }
+    };
+  }
+  
   res.json({
     protocolVersion: "2024-11-05",
     capabilities: {
@@ -100,17 +119,7 @@ app.post("/mcp/initialize", (req, res) => {
       architecture: "decoupled-ai",
       aiOrchestration: "n8n"
     },
-    // Support both OAuth2 and Bearer token authentication
-    authentication: bearerToken ? {
-      method: "bearer"
-    } : {
-      method: "oauth2",
-      oauth2: {
-        authorizationEndpoint: "/oauth2/authorize",
-        tokenEndpoint: "/oauth2/token",
-        scopes: ["mcp:read", "mcp:write"]
-      }
-    }
+    authentication: authResponse
   });
 });
 
@@ -429,6 +438,31 @@ app.get("/", (req, res) => {
       callTool: "POST /mcp/tools/call",
       listResources: "POST /mcp/resources/list",
       readResource: "POST /mcp/resources/read"
+    }
+  });
+});
+
+// 404 handler for undefined routes
+app.use((req, res) => {
+  console.log(`404 - Route not found: ${req.method} ${req.path}`);
+  res.status(404).json({
+    error: {
+      code: 404,
+      message: "Route not found",
+      path: req.path,
+      method: req.method,
+      availableEndpoints: [
+        "POST /mcp/initialize",
+        "POST /mcp/tools/list",
+        "POST /mcp/tools/call",
+        "POST /mcp/resources/list",
+        "POST /mcp/resources/read",
+        "GET /health",
+        "GET /",
+        "GET /oauth2/authorize",
+        "POST /oauth2/token",
+        "GET /.well-known/oauth-authorization-server"
+      ]
     }
   });
 });
