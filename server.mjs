@@ -84,6 +84,10 @@ function getBearerToken(req) {
 function handleInitialize(req, res) {
   const { protocolVersion, capabilities, clientInfo } = req.body;
   
+  // Get base URL for absolute OAuth endpoints
+  const protocol = req.get('x-forwarded-proto') || req.protocol || 'https';
+  const baseUrl = `${protocol}://${req.get('host')}`;
+  
   // Check if Bearer token is provided (alternative to OAuth)
   const bearerToken = getBearerToken(req);
   
@@ -95,12 +99,12 @@ function handleInitialize(req, res) {
       method: "bearer"
     };
   } else {
-    // No bearer token - offer OAuth2
+    // No bearer token - offer OAuth2 with absolute URLs
     authResponse = {
       method: "oauth2",
       oauth2: {
-        authorizationEndpoint: "/oauth2/authorize",
-        tokenEndpoint: "/oauth2/token",
+        authorizationEndpoint: `${baseUrl}/oauth2/authorize`,
+        tokenEndpoint: `${baseUrl}/oauth2/token`,
         scopes: ["mcp:read", "mcp:write"]
       }
     };
