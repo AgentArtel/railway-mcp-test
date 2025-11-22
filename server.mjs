@@ -62,9 +62,21 @@ app.use(express.urlencoded({ extended: true }));
 // This follows the Model Context Protocol specification
 // Unified server that merges multiple MCP providers
 
+// Helper to extract Bearer token from Authorization header
+function getBearerToken(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.substring(7);
+  }
+  return null;
+}
+
 // Initialize endpoint - called when client connects
 app.post("/mcp/initialize", (req, res) => {
   const { protocolVersion, capabilities, clientInfo } = req.body;
+  
+  // Check if Bearer token is provided (alternative to OAuth)
+  const bearerToken = getBearerToken(req);
   
   res.json({
     protocolVersion: "2024-11-05",
@@ -88,8 +100,10 @@ app.post("/mcp/initialize", (req, res) => {
       architecture: "decoupled-ai",
       aiOrchestration: "n8n"
     },
-    // Declare OAuth2 support for Lovable compatibility
-    authentication: {
+    // Support both OAuth2 and Bearer token authentication
+    authentication: bearerToken ? {
+      method: "bearer"
+    } : {
       method: "oauth2",
       oauth2: {
         authorizationEndpoint: "/oauth2/authorize",
@@ -159,6 +173,10 @@ app.post("/oauth2/token", (req, res) => {
 
 // List available tools - merges tools from all providers
 app.post("/mcp/tools/list", (req, res) => {
+  // Bearer token is optional - if provided, we accept it
+  const bearerToken = getBearerToken(req);
+  // (In production, you'd validate the token here)
+  
   // Merge tools from all MCP providers
   const allTools = [
     ...magicUITools,
