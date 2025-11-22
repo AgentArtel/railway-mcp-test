@@ -85,6 +85,11 @@ app.post("/mcp/initialize", (req, res) => {
       ],
       architecture: "decoupled-ai",
       aiOrchestration: "n8n"
+    },
+    // Declare that no authentication is required
+    // This tells Lovable that OAuth is not needed
+    authentication: {
+      method: "none"
     }
   });
 });
