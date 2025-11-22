@@ -275,7 +275,12 @@ async function handleToolsCall(req, res) {
       }
     });
   }
-});
+}
+
+// Call a specific tool - routes to appropriate provider
+app.post("/mcp/tools/call", handleToolsCall);
+// Alternative path
+app.post("/tools/call", handleToolsCall);
 
 // List available resources - merges resources from all providers
 app.post("/mcp/resources/list", (req, res) => {
