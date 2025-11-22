@@ -1,10 +1,10 @@
 # Unified MCP Server for Lovable
 
-A centralized Model Context Protocol (MCP) server hosted on Railway that combines multiple MCP providers in one place. Currently includes **Magic UI** and **Custom Components** - easily extensible to add more!
+A centralized Model Context Protocol (MCP) server hosted on Railway that combines multiple MCP providers in one place. Currently includes **Magic UI**, **Shadcn UI**, and **Custom Components** - easily extensible to add more!
 
 ## 🎯 Purpose
 
-This is a **unified MCP server** that hosts multiple MCP providers, giving you a single endpoint to access all your component libraries and tools. Perfect for Lovable development where you want consistent access to Magic UI components and your custom components.
+This is a **unified MCP server** that hosts multiple MCP providers, giving you a single endpoint to access all your component libraries and tools. Perfect for Lovable development where you want consistent access to Magic UI, Shadcn UI, and your custom components.
 
 ### Why Unified?
 
@@ -103,6 +103,39 @@ Search Magic UI components by keyword.
 **Parameters:**
 - `query` (string, required): Search query
 
+### Shadcn UI Tools
+
+#### 1. `shadcn_get_component`
+Get a shadcn/ui component by name (e.g., 'button', 'card', 'dialog', 'dropdown-menu').
+
+**Parameters:**
+- `componentName` (string, required): Name of the shadcn/ui component
+
+#### 2. `shadcn_list_components`
+List all available shadcn/ui components.
+
+**Parameters:**
+- `category` (string, optional): Filter by category (e.g., 'form', 'overlay', 'layout', 'feedback')
+
+#### 3. `shadcn_search_components`
+Search shadcn/ui components by keyword.
+
+**Parameters:**
+- `query` (string, required): Search query
+
+#### 4. `shadcn_get_component_code`
+Get the full source code for a shadcn/ui component.
+
+**Parameters:**
+- `componentName` (string, required): Name of the component
+- `variant` (string, optional): Optional variant name
+
+#### 5. `shadcn_get_installation_command`
+Get the CLI command to install a shadcn/ui component.
+
+**Parameters:**
+- `componentName` (string, required): Name of the component to install
+
 ### Custom Component Tools
 
 #### 1. `get_component`
@@ -133,6 +166,28 @@ Create a new component and add it to your library.
 - `magicui://grid-background` - Animated grid background
 - `magicui://shimmer` - Shimmer loading effect
 - `magicui://animated-beam` - Animated beam connector
+
+### Shadcn UI Resources
+- `shadcn://button` - Button component
+- `shadcn://card` - Card component
+- `shadcn://dialog` - Dialog/modal component
+- `shadcn://dropdown-menu` - Dropdown menu component
+- `shadcn://input` - Input field component
+- `shadcn://label` - Label component
+- `shadcn://select` - Select dropdown component
+- `shadcn://textarea` - Textarea component
+- `shadcn://checkbox` - Checkbox component
+- `shadcn://radio-group` - Radio group component
+- `shadcn://switch` - Switch toggle component
+- `shadcn://table` - Table component
+- `shadcn://tabs` - Tabs component
+- `shadcn://accordion` - Accordion component
+- `shadcn://alert` - Alert component
+- `shadcn://badge` - Badge component
+- `shadcn://avatar` - Avatar component
+- `shadcn://skeleton` - Skeleton loading component
+- `shadcn://toast` - Toast notification component
+- `shadcn://tooltip` - Tooltip component
 
 ### Custom Component Resources
 - `component://button` - Button component
@@ -171,6 +226,12 @@ The server uses a modular architecture, making it easy to add new MCP providers:
 - Currently uses placeholder data - integrate with Magic UI's actual API/component library
 - Visit [magicui.design](https://magicui.design) for component documentation
 
+#### Shadcn UI Provider
+- Edit `mcp-providers/shadcn.mjs`
+- Currently uses placeholder data - integrate with shadcn/ui's actual component library
+- Visit [ui.shadcn.com](https://ui.shadcn.com) for component documentation
+- Components are installed via CLI: `npx shadcn@latest add <component>`
+
 #### Custom Components Provider
 - Edit `mcp-providers/custom-components.mjs`
 - Implement actual storage (database, file system, etc.)
@@ -187,6 +248,7 @@ railway-mcp-test/
 ├── server.mjs                    # Main unified MCP server
 ├── mcp-providers/                # Modular MCP provider modules
 │   ├── magic-ui.mjs             # Magic UI MCP provider
+│   ├── shadcn.mjs               # Shadcn UI MCP provider
 │   └── custom-components.mjs     # Custom components provider
 ├── package.json                 # Dependencies and scripts
 ├── railway.json                 # Railway deployment configuration
@@ -212,11 +274,12 @@ The server uses a **modular provider architecture**:
 ## 📝 Next Steps
 
 1. **Integrate Magic UI's actual component library** - Currently uses placeholders
-2. **Implement persistent storage** for custom components (database or file system)
-3. **Add more MCP providers** - Extend with other component libraries or tools
-4. **Add authentication** if you need to restrict access
-5. **Add logging and monitoring** for production use
-6. **Set up component caching** for better performance
+2. **Integrate Shadcn UI's actual component library** - Currently uses placeholders
+3. **Implement persistent storage** for custom components (database or file system)
+4. **Add more MCP providers** - Extend with other component libraries or tools
+5. **Add authentication** if you need to restrict access
+6. **Add logging and monitoring** for production use
+7. **Set up component caching** for better performance
 
 ## 🆘 Troubleshooting
 

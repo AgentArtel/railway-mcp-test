@@ -14,6 +14,12 @@ import {
   handleCustomComponentTool, 
   handleCustomComponentResource 
 } from "./mcp-providers/custom-components.mjs";
+import { 
+  shadcnTools, 
+  shadcnResources, 
+  handleShadcnTool, 
+  handleShadcnResource 
+} from "./mcp-providers/shadcn.mjs";
 
 const app = express();
 
@@ -44,7 +50,7 @@ app.post("/mcp/initialize", (req, res) => {
     serverInfo: {
       name: "unified-mcp-server",
       version: "1.0.0",
-      providers: ["magic-ui", "custom-components"]
+      providers: ["magic-ui", "shadcn", "custom-components"]
     }
   });
 });
@@ -54,6 +60,7 @@ app.post("/mcp/tools/list", (req, res) => {
   // Merge tools from all MCP providers
   const allTools = [
     ...magicUITools,
+    ...shadcnTools,
     ...customComponentTools
   ];
   
@@ -72,6 +79,10 @@ app.post("/mcp/tools/call", async (req, res) => {
     // Route to Magic UI provider
     if (name.startsWith("magicui_")) {
       result = await handleMagicUITool(name, args);
+    }
+    // Route to Shadcn UI provider
+    else if (name.startsWith("shadcn_")) {
+      result = await handleShadcnTool(name, args);
     }
     // Route to custom components provider
     else if (name === "get_component" || name === "list_components" || name === "create_component") {
@@ -103,6 +114,7 @@ app.post("/mcp/resources/list", (req, res) => {
   // Merge resources from all MCP providers
   const allResources = [
     ...magicUIResources,
+    ...shadcnResources,
     ...customComponentResources
   ];
   
@@ -120,6 +132,12 @@ app.post("/mcp/resources/read", async (req, res) => {
     
     // Try Magic UI provider first
     result = await handleMagicUIResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try Shadcn UI provider
+    result = await handleShadcnResource(uri);
     if (result) {
       return res.json(result);
     }
@@ -166,6 +184,12 @@ app.get("/", (req, res) => {
         resources: magicUIResources.length
       },
       {
+        name: "Shadcn UI",
+        description: "shadcn/ui component library integration",
+        tools: shadcnTools.length,
+        resources: shadcnResources.length
+      },
+      {
         name: "Custom Components",
         description: "Your custom component library",
         tools: customComponentTools.length,
@@ -200,6 +224,7 @@ app.listen(PORT, () => {
   console.log(`📡 Ready for Lovable connections`);
   console.log(`✨ Providers loaded:`);
   console.log(`   - Magic UI (${magicUITools.length} tools, ${magicUIResources.length} resources)`);
+  console.log(`   - Shadcn UI (${shadcnTools.length} tools, ${shadcnResources.length} resources)`);
   console.log(`   - Custom Components (${customComponentTools.length} tools, ${customComponentResources.length} resources)`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 });
