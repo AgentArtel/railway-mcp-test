@@ -48,39 +48,101 @@ export const magicUITools = [
   }
 ];
 
-// Magic UI component resources
-export const magicUIResources = [
-  {
-    uri: "magicui://marquee",
-    name: "Marquee Component",
-    description: "Animated marquee component for logos or text",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "magicui://blur-fade",
-    name: "Blur Fade Text",
-    description: "Text animation with blur fade effect",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "magicui://grid-background",
-    name: "Grid Background",
-    description: "Animated grid background component",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "magicui://shimmer",
-    name: "Shimmer Effect",
-    description: "Shimmer loading effect component",
-    mimeType: "text/plain"
-  },
-  {
-    uri: "magicui://animated-beam",
-    name: "Animated Beam",
-    description: "Animated beam connecting elements",
-    mimeType: "text/plain"
-  }
+// All Magic UI components organized by category
+// Source: https://magicui.design/docs/components
+export const allMagicUIComponents = [
+  // Components (General)
+  { name: "marquee", category: "components", description: "Animated marquee component for logos or text" },
+  { name: "terminal", category: "components", description: "Terminal component with command line interface" },
+  { name: "hero-video-dialog", category: "components", description: "Hero section with video dialog" },
+  { name: "bento-grid", category: "components", description: "Bento grid layout component" },
+  { name: "animated-list", category: "components", description: "Animated list component" },
+  { name: "dock", category: "components", description: "Dock navigation component" },
+  { name: "globe", category: "components", description: "3D globe component" },
+  { name: "tweet-card", category: "components", description: "Twitter/X tweet card component" },
+  { name: "orbiting-circles", category: "components", description: "Orbiting circles animation" },
+  { name: "avatar-circles", category: "components", description: "Avatar circles component" },
+  { name: "icon-cloud", category: "components", description: "Icon cloud visualization" },
+  { name: "lens", category: "components", description: "Lens/magnifying glass effect" },
+  { name: "pointer", category: "components", description: "Custom pointer component" },
+  { name: "smooth-cursor", category: "components", description: "Smooth cursor animation" },
+  { name: "progressive-blur", category: "components", description: "Progressive blur effect" },
+  { name: "dotted-map", category: "components", description: "Dotted map visualization" },
+  
+  // Special Effects
+  { name: "animated-beam", category: "special-effects", description: "Animated beam connecting elements" },
+  { name: "border-beam", category: "special-effects", description: "Animated border beam effect" },
+  { name: "shine-border", category: "special-effects", description: "Shine border animation" },
+  { name: "magic-card", category: "special-effects", description: "Magic card with hover effects" },
+  { name: "meteors", category: "special-effects", description: "Meteor shower animation" },
+  { name: "confetti", category: "special-effects", description: "Confetti animation" },
+  { name: "particles", category: "special-effects", description: "Particle effects" },
+  { name: "animated-theme-toggler", category: "special-effects", description: "Animated theme toggle component" },
+  
+  // Animations
+  { name: "blur-fade", category: "animations", description: "Blur fade text animation" },
+  
+  // Text Animations
+  { name: "text-animate", category: "text-animations", description: "Text animation component" },
+  { name: "typing-animation", category: "text-animations", description: "Typing animation effect" },
+  { name: "line-shadow-text", category: "text-animations", description: "Line shadow text effect" },
+  { name: "aurora-text", category: "text-animations", description: "Aurora text animation" },
+  { name: "video-text", category: "text-animations", description: "Video text effect" },
+  { name: "number-ticker", category: "text-animations", description: "Number ticker animation" },
+  { name: "animated-shiny-text", category: "text-animations", description: "Animated shiny text" },
+  { name: "animated-gradient-text", category: "text-animations", description: "Animated gradient text" },
+  { name: "text-reveal", category: "text-animations", description: "Text reveal animation" },
+  { name: "hyper-text", category: "text-animations", description: "Hyper text effect" },
+  { name: "word-rotate", category: "text-animations", description: "Word rotation animation" },
+  { name: "scroll-based-velocity", category: "text-animations", description: "Scroll-based velocity text" },
+  { name: "sparkles-text", category: "text-animations", description: "Sparkles text effect" },
+  { name: "morphing-text", category: "text-animations", description: "Morphing text animation" },
+  { name: "spinning-text", category: "text-animations", description: "Spinning text animation" },
+  { name: "text-highlighter", category: "text-animations", description: "Text highlighter effect" },
+  
+  // Device Mocks
+  { name: "safari", category: "device-mocks", description: "Safari browser mock" },
+  { name: "iphone", category: "device-mocks", description: "iPhone device mock" },
+  { name: "android", category: "device-mocks", description: "Android device mock" },
+  
+  // Buttons
+  { name: "rainbow-button", category: "buttons", description: "Rainbow button component" },
+  { name: "shimmer-button", category: "buttons", description: "Shimmer button effect" },
+  { name: "ripple-button", category: "buttons", description: "Ripple button effect" },
+  
+  // Backgrounds
+  { name: "flickering-grid", category: "backgrounds", description: "Flickering grid background" },
+  { name: "animated-grid-pattern", category: "backgrounds", description: "Animated grid pattern" },
+  { name: "retro-grid", category: "backgrounds", description: "Retro grid background" },
+  { name: "ripple", category: "backgrounds", description: "Ripple background effect" },
+  { name: "dot-pattern", category: "backgrounds", description: "Dot pattern background" },
+  { name: "grid-pattern", category: "backgrounds", description: "Grid pattern background" },
+  { name: "striped-pattern", category: "backgrounds", description: "Striped pattern background" },
+  { name: "interactive-grid-pattern", category: "backgrounds", description: "Interactive grid pattern" },
+  { name: "light-rays", category: "backgrounds", description: "Light rays background" },
+  
+  // Community Components
+  { name: "shiny-button", category: "community", description: "Shiny button component" },
+  { name: "file-tree", category: "community", description: "File tree component" },
+  { name: "code-comparison", category: "community", description: "Code comparison component" },
+  { name: "scroll-progress", category: "community", description: "Scroll progress indicator" },
+  { name: "neon-gradient-card", category: "community", description: "Neon gradient card" },
+  { name: "comic-text", category: "community", description: "Comic text effect" },
+  { name: "cool-mode", category: "community", description: "Cool mode effect" },
+  { name: "pixel-image", category: "community", description: "Pixel image effect" },
+  { name: "pulsating-button", category: "community", description: "Pulsating button" },
+  { name: "warp-background", category: "community", description: "Warp background effect" },
+  { name: "interactive-hover-button", category: "community", description: "Interactive hover button" },
+  { name: "animated-circular-progress-bar", category: "community", description: "Animated circular progress bar" }
 ];
+
+// Generate resources from all components
+export const magicUIResources = allMagicUIComponents.map(comp => ({
+  uri: `magicui://${comp.name}`,
+  name: comp.name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+  description: comp.description,
+  mimeType: "text/plain"
+}));
 
 /**
  * Handle Magic UI tool calls
@@ -111,27 +173,24 @@ export async function handleMagicUITool(name, args) {
     
     case "magicui_list_components": {
       const category = args?.category;
-      const components = [
-        { name: "marquee", category: "animations", description: "Animated marquee for logos/text" },
-        { name: "blur-fade", category: "animations", description: "Blur fade text animation" },
-        { name: "grid-background", category: "effects", description: "Animated grid background" },
-        { name: "shimmer", category: "effects", description: "Shimmer loading effect" },
-        { name: "animated-beam", category: "animations", description: "Animated beam connector" },
-        { name: "particles", category: "effects", description: "Particle effects" },
-        { name: "ripple", category: "effects", description: "Ripple effect" },
-        { name: "dock", category: "layouts", description: "Dock navigation component" },
-        { name: "tabs", category: "layouts", description: "Animated tabs component" }
-      ];
       
       const filtered = category 
-        ? components.filter(c => c.category === category)
-        : components;
+        ? allMagicUIComponents.filter(c => c.category === category)
+        : allMagicUIComponents;
+      
+      // Also include available categories
+      const categories = [...new Set(allMagicUIComponents.map(c => c.category))];
       
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({ components: filtered }, null, 2)
+            text: JSON.stringify({ 
+              components: filtered,
+              total: allMagicUIComponents.length,
+              categories: categories,
+              filtered: filtered.length
+            }, null, 2)
           }
         ]
       };
@@ -139,24 +198,23 @@ export async function handleMagicUITool(name, args) {
     
     case "magicui_search_components": {
       const query = args?.query?.toLowerCase() || "";
-      const allComponents = [
-        { name: "marquee", category: "animations" },
-        { name: "blur-fade", category: "animations" },
-        { name: "grid-background", category: "effects" },
-        { name: "shimmer", category: "effects" },
-        { name: "animated-beam", category: "animations" }
-      ];
       
-      const results = allComponents.filter(c => 
+      const results = allMagicUIComponents.filter(c => 
         c.name.toLowerCase().includes(query) || 
-        c.category.toLowerCase().includes(query)
+        c.category.toLowerCase().includes(query) ||
+        c.description.toLowerCase().includes(query)
       );
       
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({ results }, null, 2)
+            text: JSON.stringify({ 
+              results,
+              query,
+              count: results.length,
+              total: allMagicUIComponents.length
+            }, null, 2)
           }
         ]
       };
