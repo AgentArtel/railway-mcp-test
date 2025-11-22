@@ -55,6 +55,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+// Support URL-encoded form data for OAuth2 token endpoint
+app.use(express.urlencoded({ extended: true }));
 
 // MCP Protocol Implementation
 // This follows the Model Context Protocol specification
@@ -86,12 +88,73 @@ app.post("/mcp/initialize", (req, res) => {
       architecture: "decoupled-ai",
       aiOrchestration: "n8n"
     },
-    // Declare that no authentication is required
-    // This tells Lovable that OAuth is not needed
+    // Declare OAuth2 support for Lovable compatibility
     authentication: {
-      method: "none"
+      method: "oauth2",
+      oauth2: {
+        authorizationEndpoint: "/oauth2/authorize",
+        tokenEndpoint: "/oauth2/token",
+        scopes: ["mcp:read", "mcp:write"]
+      }
     }
   });
+});
+
+// OAuth2 Authorization endpoint (simplified - for Lovable compatibility)
+app.get("/oauth2/authorize", (req, res) => {
+  const { client_id, redirect_uri, response_type, scope, state } = req.query;
+  
+  // For simplicity, we'll auto-approve and redirect back
+  // In production, you'd show an authorization page
+  if (response_type === "code" && redirect_uri) {
+    // Generate a simple authorization code
+    const authCode = Buffer.from(`${Date.now()}-${Math.random()}`).toString('base64');
+    
+    // Store the code temporarily (in production, use a proper session store)
+    // For now, we'll redirect with the code
+    const redirectUrl = new URL(redirect_uri);
+    redirectUrl.searchParams.set('code', authCode);
+    if (state) redirectUrl.searchParams.set('state', state);
+    
+    return res.redirect(redirectUrl.toString());
+  }
+  
+  res.status(400).json({ error: "Invalid request" });
+});
+
+// OAuth2 Token endpoint
+app.post("/oauth2/token", (req, res) => {
+  const { grant_type, code, client_id, client_secret, redirect_uri } = req.body;
+  
+  // Set proper content type for OAuth2 token response
+  res.setHeader('Content-Type', 'application/json');
+  
+  // Simplified token issuance - in production, validate the code properly
+  if (grant_type === "authorization_code" && code) {
+    // Generate a simple access token
+    const accessToken = Buffer.from(`token-${Date.now()}-${Math.random()}`).toString('base64');
+    
+    res.json({
+      access_token: accessToken,
+      token_type: "Bearer",
+      expires_in: 3600,
+      scope: "mcp:read mcp:write"
+    });
+  } else if (grant_type === "client_credentials") {
+    // Support client credentials flow as well
+    const accessToken = Buffer.from(`token-${Date.now()}-${Math.random()}`).toString('base64');
+    res.json({
+      access_token: accessToken,
+      token_type: "Bearer",
+      expires_in: 3600,
+      scope: "mcp:read mcp:write"
+    });
+  } else {
+    res.status(400).json({ 
+      error: "invalid_grant", 
+      error_description: grant_type ? "Invalid authorization code" : "Missing grant_type"
+    });
+  }
 });
 
 // List available tools - merges tools from all providers
@@ -256,6 +319,20 @@ app.post("/mcp/resources/read", async (req, res) => {
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "mcp-server" });
+});
+
+// OAuth2 Discovery endpoint (RFC 8414)
+app.get("/.well-known/oauth-authorization-server", (req, res) => {
+  const baseUrl = req.protocol + '://' + req.get('host');
+  res.json({
+    issuer: baseUrl,
+    authorization_endpoint: `${baseUrl}/oauth2/authorize`,
+    token_endpoint: `${baseUrl}/oauth2/token`,
+    response_types_supported: ["code"],
+    grant_types_supported: ["authorization_code", "client_credentials"],
+    token_endpoint_auth_methods_supported: ["client_secret_post", "client_secret_basic"],
+    scopes_supported: ["mcp:read", "mcp:write"]
+  });
 });
 
 // Root endpoint with info
