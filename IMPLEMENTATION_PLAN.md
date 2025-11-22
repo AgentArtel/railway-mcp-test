@@ -80,10 +80,11 @@ This unified MCP server provides:
 **Style Domain**: `web_premium`  
 **Preferred Theme**: `default`
 
-**Tools** (3):
+**Tools** (4):
 - `magicui_get_component` - Get a Magic UI component by name
 - `magicui_list_components` - List all available Magic UI components (68 total)
-- `magicui_search_components` - Search Magic UI components by keyword
+- `magicui_search_components` - Search Magic UI components by keyword (searches through use cases, patterns, and examples)
+- `magicui_get_component_context` - Get full context and use cases for a Magic UI component
 
 **Resources** (68):
 All Magic UI components organized by category:
@@ -96,7 +97,7 @@ All Magic UI components organized by category:
 - **Backgrounds** (9): flickering-grid, animated-grid-pattern, retro-grid, ripple, dot-pattern, grid-pattern, striped-pattern, interactive-grid-pattern, light-rays
 - **Community** (12): shiny-button, file-tree, code-comparison, scroll-progress, neon-gradient-card, comic-text, cool-mode, pixel-image, pulsating-button, warp-background, interactive-hover-button, animated-circular-progress-bar
 
-**Current Implementation**: All 68 components from [magicui.design](https://magicui.design/docs/components) included. Placeholder data (needs integration with actual Magic UI API for component code)
+**Current Implementation**: All 68 components from [magicui.design](https://magicui.design/docs/components) included with full context metadata (use cases, patterns, examples). Placeholder data (needs integration with actual Magic UI API for component code)
 
 ---
 
@@ -106,12 +107,13 @@ All Magic UI components organized by category:
 **Style Domain**: `web_premium`  
 **Preferred Theme**: `default`
 
-**Tools** (5):
+**Tools** (6):
 - `shadcn_get_component` - Get a shadcn/ui component by name
 - `shadcn_list_components` - List all available shadcn/ui components
-- `shadcn_search_components` - Search shadcn/ui components by keyword
+- `shadcn_search_components` - Search shadcn/ui components by keyword (searches through use cases, patterns, and examples)
 - `shadcn_get_component_code` - Get the full source code for a component
 - `shadcn_get_installation_command` - Get the CLI command to install a component
+- `shadcn_get_component_context` - Get full context and use cases for a shadcn/ui component
 
 **Resources** (20+):
 - Form components: button, input, label, select, textarea, checkbox, radio-group, switch
@@ -120,7 +122,7 @@ All Magic UI components organized by category:
 - Feedback components: alert, toast, progress, skeleton
 - Display components: avatar, badge, table, calendar
 
-**Current Implementation**: Placeholder data (needs integration with actual shadcn/ui API)
+**Current Implementation**: All 59 components from [ui.shadcn.com](https://ui.shadcn.com/docs/components) included with full context metadata (use cases, patterns, examples). Placeholder data (needs integration with actual shadcn/ui API)
 
 ---
 
@@ -241,20 +243,38 @@ All Magic UI components organized by category:
 ---
 
 ### 6. **Aceternity UI Provider** (`mcp-providers/aceternity-ui.mjs`)
-**Status**: ✅ Scaffolding Complete
+**Status**: ✅ Implemented (96 components)
 
 **Style Domain**: `web_premium`  
 **Preferred Theme**: `default`
 
 **Purpose**: Premium animated Tailwind component provider. Source: [ui.aceternity.com/components](https://ui.aceternity.com/components)
 
-**Tools** (3):
+**Tools** (4):
 1. `aceternity_get_component` - Get an Aceternity UI component by name
-2. `aceternity_list_components` - List all available Aceternity UI components
-3. `aceternity_search_components` - Search Aceternity UI components by keyword
+2. `aceternity_list_components` - List all available Aceternity UI components (96 total)
+3. `aceternity_search_components` - Search Aceternity UI components by keyword (searches through use cases, patterns, and examples)
+4. `aceternity_get_component_context` - Get full context and use cases for an Aceternity UI component
 
-**Resources** (Placeholder):
-- `aceternity://placeholder` - Placeholder resource
+**Resources** (96):
+All Aceternity UI components organized by category:
+- **Backgrounds** (24): dotted-glow-background, background-ripple-effect, sparkles, background-gradient, gradient-animation, wavy-background, background-boxes, background-beams, background-beams-with-collision, background-lines, aurora-background, meteors, glowing-stars, shooting-stars, vortex, spotlight, spotlight-new, canvas-reveal-effect, svg-mask-effect, tracing-beam, lamp-effect, grid-and-dot-backgrounds, glowing-effect, google-gemini-effect
+- **Cards** (15): tooltip-card, pixelated-canvas, 3d-card-effect, evervault-card, card-stack, card-hover-effect, wobble-card, expandable-card, card-spotlight, focus-cards, infinite-moving-cards, draggable-card, comet-card, glare-card, direction-aware-hover
+- **Scroll** (6): parallax-scroll, sticky-scroll-reveal, macbook-scroll, container-scroll-animation, hero-parallax, parallax-grid-scroll
+- **Text** (10): encrypted-text, layout-text-flip, colourful-text, text-generate-effect, typewriter-effect, flip-words, text-hover-effect, container-text-flip, hero-highlight, text-reveal-card
+- **Buttons** (4): tailwind-css-buttons, hover-border-gradient, moving-border, stateful-button
+- **Loaders** (2): multi-step-loader, loader
+- **Navigation** (7): floating-navbar, navbar-menu, sidebar, floating-dock, tabs, resizable-navbar, sticky-banner
+- **Forms** (3): signup-form, placeholders-and-vanish-input, file-upload
+- **Overlays** (3): animated-modal, animated-tooltip, link-preview
+- **Carousels** (5): images-slider, carousel, apple-cards-carousel, testimonials, animated-testimonials
+- **Layout** (3): layout-grid, bento-grid, container-cover
+- **Data** (5): github-globe, world-map, timeline, compare, codeblock
+- **Cursor** (3): following-pointer, pointer-highlight, lens
+- **3D** (3): 3d-pin, 3d-marquee, 3d-animated-pin
+- **Sections** (3): feature-sections, cards-sections, hero-sections
+
+**Current Implementation**: All 96 components from [ui.aceternity.com](https://ui.aceternity.com/components) included with full context metadata (use cases, patterns, examples). Placeholder data (needs integration with actual Aceternity UI API for component code)
 
 **Implementation Status**:
 - ✅ Scaffolding complete
@@ -265,20 +285,30 @@ All Magic UI components organized by category:
 ---
 
 ### 7. **8bitcn Provider** (`mcp-providers/eightbit.mjs`)
-**Status**: ✅ Scaffolding Complete
+**Status**: ✅ Implemented (55 components)
 
 **Style Domain**: `rpg_8bit`  
 **Preferred Theme**: `rpg_8bit`
 
 **Purpose**: Retro 8-bit pixel-art components for RPG UI projects. Source: [8bitcn.com/docs/components](https://www.8bitcn.com/docs/components)
 
-**Tools** (3):
+**Tools** (4):
 1. `eightbit_get_component` - Get an 8bitcn component by name
-2. `eightbit_list_components` - List all available 8bitcn components
-3. `eightbit_search_components` - Search 8bitcn components by keyword
+2. `eightbit_list_components` - List all available 8bitcn components (55 total)
+3. `eightbit_search_components` - Search 8bitcn components by keyword (searches through use cases, patterns, and examples)
+4. `eightbit_get_component_context` - Get full context and use cases for an 8bitcn component
 
-**Resources** (Placeholder):
-- `8bit://placeholder` - Placeholder resource
+**Resources** (55):
+All 8bitcn components organized by category:
+- **Form** (18): button, calendar, checkbox, combo-box, date-picker, input, input-otp, label, radio-group, retro-switcher, select, slider, switch, textarea, theme-selector, toggle, toggle-group, field
+- **Layout** (9): accordion, card, collapsible, resizable, scroll-area, separator, sidebar, tabs, aspect-ratio
+- **Overlay** (7): alert-dialog, context-menu, dialog, drawer, dropdown-menu, hover-card, popover, sheet, tooltip
+- **Display** (10): avatar, badge, carousel, chart, empty, item, kbd, table, typography, data-table
+- **Feedback** (4): alert, progress, skeleton, spinner, toast
+- **Navigation** (4): breadcrumb, command, menubar, navigation-menu, pagination
+- **RPG** (3): enemy-health, health-bar, mana-bar
+
+**Current Implementation**: All 55 components from [8bitcn.com](https://www.8bitcn.com/docs/components) included with full context metadata (use cases, patterns, examples) tailored for RPG/8-bit style projects. Placeholder data (needs integration with actual 8bitcn API for component code)
 
 **Implementation Status**:
 - ✅ Scaffolding complete
@@ -358,14 +388,14 @@ Each provider includes:
 
 | Provider | Status | Tools | Resources | Style Domain | Theme |
 |----------|--------|-------|-----------|--------------|-------|
-| Magic UI | ✅ Complete | 3 | 68 | web_premium | default |
-| Shadcn UI | ✅ Complete | 5 | 20+ | web_premium | default |
+| Magic UI | ✅ Complete | 4 | 68 | web_premium | default |
+| Shadcn UI | ✅ Complete | 6 | 59 | web_premium | default |
 | Custom Components | ✅ Complete | 3 | 2 | web_premium | default |
 | AI Router | ✅ Scaffolding | 4 | 2 | all | n/a |
 | Brand System | ✅ Scaffolding | 10 | 6 | all | default |
-| Aceternity UI | ✅ Scaffolding | 3 | 1 | web_premium | default |
-| 8bitcn | ✅ Scaffolding | 3 | 1 | rpg_8bit | rpg_8bit |
-| **TOTAL** | **7 Providers** | **35 Tools** | **100+ Resources** | | |
+| Aceternity UI | ✅ Complete | 4 | 96 | web_premium | default |
+| 8bitcn | ✅ Complete | 4 | 55 | rpg_8bit | rpg_8bit |
+| **TOTAL** | **7 Providers** | **35 Tools** | **290 Resources** | | |
 
 ### Planned Providers
 
@@ -414,6 +444,94 @@ Each provider includes:
 - [ ] Lucide Icons provider
 - [ ] Tailwind CSS provider
 - [ ] Docs/Patterns provider
+
+---
+
+## 🎯 Component Context Enhancement
+
+### Overview
+
+All component providers (Magic UI, Shadcn UI, Aceternity UI, 8bitcn) have been enhanced with rich metadata to help AI assistants make better component selection decisions. Each component now includes:
+
+- **useCases**: Array of common use cases for the component
+- **commonPatterns**: Array of typical usage patterns
+- **whenToUse**: Array of scenarios when the component is appropriate
+- **whenNotToUse**: Array of scenarios when the component should NOT be used
+- **examples**: Array of real-world usage examples
+- **relatedComponents**: Array of related component names
+
+### New Tools
+
+Each provider now includes a `get_component_context` tool:
+- `magicui_get_component_context` - Get full context for a Magic UI component
+- `shadcn_get_component_context` - Get full context for a Shadcn UI component
+- `aceternity_get_component_context` - Get full context for an Aceternity UI component
+- `eightbit_get_component_context` - Get full context for an 8bitcn component
+
+### Enhanced Search
+
+All search functions now search through:
+- Component names
+- Categories
+- Descriptions
+- Use cases
+- Common patterns
+- Examples
+
+This enables semantic search that finds components based on use case queries like "I need a button for form submission" or "Show me components for displaying data".
+
+### Enhanced Resources
+
+Resource read handlers now include full context metadata in their responses, providing AI assistants with comprehensive information about when and how to use each component.
+
+### Implementation Status
+
+- ✅ **Shadcn UI**: All 59 components enhanced with context
+- ✅ **Magic UI**: All 68 components enhanced with context
+- ✅ **Aceternity UI**: All 96 components enhanced with context
+- ✅ **8bitcn**: All 55 components enhanced with context
+- **Total**: 278 components with full context metadata
+
+### Example Enhanced Component
+
+```javascript
+{
+  name: "dialog",
+  category: "overlay",
+  description: "A window overlaid on either the primary window or another dialog",
+  useCases: [
+    "Confirm destructive actions",
+    "Display detailed information",
+    "Collect user input in a focused context",
+    "Show alerts or notifications"
+  ],
+  commonPatterns: [
+    "Confirmation dialogs (Yes/No)",
+    "Form dialogs (collect data)",
+    "Information dialogs (read-only)",
+    "Multi-step wizards"
+  ],
+  whenToUse: [
+    "User needs to confirm an action",
+    "Displaying critical information",
+    "Collecting focused input",
+    "Interrupting workflow for attention"
+  ],
+  whenNotToUse: [
+    "Simple notifications (use Toast)",
+    "Non-blocking information (use Popover)",
+    "Navigation (use Sheet or Drawer)",
+    "Quick actions (use Dropdown Menu)"
+  ],
+  examples: [
+    "Delete confirmation: 'Are you sure you want to delete this item?'",
+    "Edit form: Modal with form fields",
+    "Error display: 'Something went wrong'",
+    "Image preview: Full-screen image viewer"
+  ],
+  relatedComponents: ["alert-dialog", "sheet", "drawer", "popover"]
+}
+```
 
 ---
 
