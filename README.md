@@ -1,10 +1,15 @@
 # Unified MCP Server for Lovable
 
-A centralized Model Context Protocol (MCP) server hosted on Railway that combines multiple MCP providers in one place. Currently includes **Magic UI**, **Shadcn UI**, and **Custom Components** - easily extensible to add more!
+A centralized Model Context Protocol (MCP) server hosted on Railway that combines multiple MCP providers in one place. Includes **Magic UI**, **Shadcn UI**, **Aceternity UI**, **8bitcn**, **Brand System (Design API)**, **AI Router**, and **Custom Components** - easily extensible to add more!
 
 ## 🎯 Purpose
 
-This is a **unified MCP server** that hosts multiple MCP providers, giving you a single endpoint to access all your component libraries and tools. Perfect for Lovable development where you want consistent access to Magic UI, Shadcn UI, and your custom components.
+This is a **unified MCP server** that hosts multiple MCP providers, giving you a single endpoint to access all your component libraries, design tokens, and AI tools. Perfect for Lovable development where you want consistent access to:
+
+- **Component Libraries**: Magic UI (68), Shadcn UI (59), Aceternity UI (96), 8bitcn (55) - **278 total components**
+- **Design System API**: Complete Brand System with design tokens, themes, and validation
+- **AI Operations**: Decoupled AI router via n8n webhooks
+- **Custom Components**: Your own component library
 
 ### Why Unified?
 
@@ -83,115 +88,122 @@ The server will run on `http://localhost:4001` (or the port specified in `PORT` 
 
 ## 🛠️ Available Tools
 
-### Magic UI Tools
+### Component Library Tools
 
-#### 1. `magicui_get_component`
-Get a Magic UI component by name (e.g., 'marquee', 'blur-fade', 'grid-background').
+#### Magic UI (68 components)
+- `magicui_get_component` - Get component by name
+- `magicui_list_components` - List all components (filter by category)
+- `magicui_search_components` - Search components by keyword
+- `magicui_get_component_context` - Get detailed context, use cases, and examples
 
-**Parameters:**
-- `componentName` (string, required): Name of the Magic UI component
+#### Shadcn UI (59 components)
+- `shadcn_get_component` - Get component by name
+- `shadcn_list_components` - List all components (filter by category)
+- `shadcn_search_components` - Search components by keyword
+- `shadcn_get_component_code` - Get full source code
+- `shadcn_get_installation_command` - Get CLI install command
+- `shadcn_get_component_context` - Get detailed context, use cases, and examples
 
-#### 2. `magicui_list_components`
-List all available Magic UI components.
+#### Aceternity UI (96 components)
+- `aceternity_get_component` - Get component by name
+- `aceternity_list_components` - List all components
+- `aceternity_search_components` - Search components by keyword
+- `aceternity_get_component_context` - Get detailed context, use cases, and examples
 
-**Parameters:**
-- `category` (string, optional): Filter by category (e.g., 'animations', 'effects', 'layouts')
+#### 8bitcn (55 components)
+- `eightbit_get_component` - Get component by name
+- `eightbit_list_components` - List all components
+- `eightbit_search_components` - Search components by keyword
+- `eightbit_get_component_context` - Get detailed context, use cases, and examples
 
-#### 3. `magicui_search_components`
-Search Magic UI components by keyword.
+### Brand System (Design API) Tools
 
-**Parameters:**
-- `query` (string, required): Search query
+The Brand System provides a complete Design System API with **nested property access**, **validation**, and **helpful error messages**.
 
-### Shadcn UI Tools
+#### Color Tools
+- `brand_get_color` - Get color value (supports nested: `"primary.500"` or simple: `"success"`)
+  - **Parameters**: `colorName` (string), `theme` (optional, default: "default")
+  - **Examples**: `"primary.500"`, `"secondary.600"`, `"success"`
+  - **Features**: Nested access, validation, error suggestions
 
-#### 1. `shadcn_get_component`
-Get a shadcn/ui component by name (e.g., 'button', 'card', 'dialog', 'dropdown-menu').
+- `brand_list_colors` - List all available colors for a theme
+  - **Parameters**: `theme` (optional)
 
-**Parameters:**
-- `componentName` (string, required): Name of the shadcn/ui component
+#### Spacing Tools
+- `brand_get_spacing` - Get spacing value (supports `scale.4` or `semantic.md`)
+  - **Parameters**: `size` (string), `theme` (optional)
+  - **Features**: Checks scale, semantic, and direct access
 
-#### 2. `shadcn_list_components`
-List all available shadcn/ui components.
+- `brand_list_spacing` - List all spacing values
 
-**Parameters:**
-- `category` (string, optional): Filter by category (e.g., 'form', 'overlay', 'layout', 'feedback')
+#### Typography Tools
+- `brand_get_typography` - Get typography value (supports nested: `"fontSizes.base"`)
+  - **Parameters**: `property` (string), `theme` (optional)
+  - **Examples**: `"fontSizes.base"`, `"fontFamilies.sans"`, `"fontWeights.bold"`
+  - **Features**: Nested access, validation
 
-#### 3. `shadcn_search_components`
-Search shadcn/ui components by keyword.
+- `brand_list_typography` - List all typography values
 
-**Parameters:**
-- `query` (string, required): Search query
+#### Other Design Tokens
+- `brand_get_radius` - Get border radius value
+- `brand_get_shadow` - Get shadow value
+- `brand_get_theme` - Get complete theme configuration
+- `brand_list_tokens` - List all design tokens for a theme
 
-#### 4. `shadcn_get_component_code`
-Get the full source code for a shadcn/ui component.
+**Brand System Features:**
+- ✅ Nested property access (`primary.500`, `fontSizes.base`)
+- ✅ Token validation (color formats, CSS values)
+- ✅ Helpful error messages with suggestions
+- ✅ Multi-theme support (`default`, `rpg_8bit`)
+- ✅ Automatic token discovery
 
-**Parameters:**
-- `componentName` (string, required): Name of the component
-- `variant` (string, optional): Optional variant name
+### AI Router Tools
 
-#### 5. `shadcn_get_installation_command`
-Get the CLI command to install a shadcn/ui component.
+All AI operations route through n8n webhooks (decoupled architecture):
 
-**Parameters:**
-- `componentName` (string, required): Name of the component to install
+- `ai_call` - Generic AI operation via n8n
+- `ai_summarize` - Summarize content via n8n
+- `ai_extract` - Extract data via n8n
+- `ai_generate` - Generate content via n8n
+
+**Note**: These tools POST to n8n webhooks - AI logic is handled downstream, not directly in Lovable.
 
 ### Custom Component Tools
 
-#### 1. `get_component`
-Retrieve a specific component from your custom component library.
-
-**Parameters:**
-- `componentName` (string, required): Name of the component
-
-#### 2. `list_components`
-List all available components in your custom library.
-
-**Parameters:**
-- `category` (string, optional): Filter by category
-
-#### 3. `create_component`
-Create a new component and add it to your library.
-
-**Parameters:**
-- `name` (string, required): Component name
-- `code` (string, required): Component code/implementation
-- `category` (string, optional): Component category
+- `get_component` - Retrieve a custom component
+- `list_components` - List all custom components
+- `create_component` - Create a new custom component
 
 ## 📦 Available Resources
 
-### Magic UI Resources
-- `magicui://marquee` - Animated marquee component
-- `magicui://blur-fade` - Blur fade text animation
-- `magicui://grid-background` - Animated grid background
-- `magicui://shimmer` - Shimmer loading effect
-- `magicui://animated-beam` - Animated beam connector
+### Component Library Resources
 
-### Shadcn UI Resources
-- `shadcn://button` - Button component
-- `shadcn://card` - Card component
-- `shadcn://dialog` - Dialog/modal component
-- `shadcn://dropdown-menu` - Dropdown menu component
-- `shadcn://input` - Input field component
-- `shadcn://label` - Label component
-- `shadcn://select` - Select dropdown component
-- `shadcn://textarea` - Textarea component
-- `shadcn://checkbox` - Checkbox component
-- `shadcn://radio-group` - Radio group component
-- `shadcn://switch` - Switch toggle component
-- `shadcn://table` - Table component
-- `shadcn://tabs` - Tabs component
-- `shadcn://accordion` - Accordion component
-- `shadcn://alert` - Alert component
-- `shadcn://badge` - Badge component
-- `shadcn://avatar` - Avatar component
-- `shadcn://skeleton` - Skeleton loading component
-- `shadcn://toast` - Toast notification component
-- `shadcn://tooltip` - Tooltip component
+All component libraries provide resources in the format:
+- `magicui://<component-name>` - Magic UI components (68 available)
+- `shadcn://<component-name>` - Shadcn UI components (59 available)
+- `aceternity://<component-name>` - Aceternity UI components (96 available)
+- `8bit://<component-name>` - 8bitcn components (55 available)
+- `component://<component-name>` - Custom components
 
-### Custom Component Resources
-- `component://button` - Button component
-- `component://card` - Card component
+### Brand System Resources (Design API)
+
+- `brand://colors` - Complete color palette (supports nested access)
+- `brand://spacing` - Spacing scale (scale + semantic values)
+- `brand://typography` - Typography system (fonts, sizes, weights, line heights)
+- `brand://radii` - Border radius values
+- `brand://shadows` - Shadow values
+- `brand://themes` - Complete theme configurations
+
+**Example Usage:**
+```javascript
+// Get nested color
+brand_get_color({ colorName: "primary.500", theme: "default" })
+// Returns: { color: "#0ea5e9", valid: true }
+
+// Get typography
+brand_get_typography({ property: "fontSizes.base", theme: "default" })
+// Returns: { value: "1rem", valid: true }
+```
 
 ## 🔧 Customization
 
@@ -221,21 +233,33 @@ The server uses a modular architecture, making it easy to add new MCP providers:
 
 ### Customizing Existing Providers
 
-#### Magic UI Provider
-- Edit `mcp-providers/magic-ui.mjs`
-- Currently uses placeholder data - integrate with Magic UI's actual API/component library
-- Visit [magicui.design](https://magicui.design) for component documentation
+#### Component Library Providers
+- **Magic UI**: `mcp-providers/magic-ui.mjs` - 68 components with full context metadata
+- **Shadcn UI**: `mcp-providers/shadcn.mjs` - 59 components with full context metadata
+- **Aceternity UI**: `mcp-providers/aceternity-ui.mjs` - 96 components with full context metadata
+- **8bitcn**: `mcp-providers/eightbit.mjs` - 55 components with full context metadata
 
-#### Shadcn UI Provider
-- Edit `mcp-providers/shadcn.mjs`
-- Currently uses placeholder data - integrate with shadcn/ui's actual component library
-- Visit [ui.shadcn.com](https://ui.shadcn.com) for component documentation
-- Components are installed via CLI: `npx shadcn@latest add <component>`
+All component providers include:
+- Component context metadata (use cases, patterns, examples)
+- Search functionality across metadata
+- `get_component_context` tools for detailed information
+
+#### Brand System Provider
+- **File**: `mcp-providers/brand-system.mjs`
+- **Token Files**: `design-tokens/*.json`
+- **Features**: Nested property access, validation, error handling
+- **Themes**: `default`, `rpg_8bit`
+- **Status**: ✅ Complete with all features implemented
+
+#### AI Router Provider
+- **File**: `mcp-providers/ai-router.mjs`
+- **Purpose**: Routes AI operations to n8n webhooks
+- **Configuration**: Set `N8N_WEBHOOK_URL` environment variable
+- **Status**: ⏳ Scaffolding complete, needs n8n webhook URL configuration
 
 #### Custom Components Provider
-- Edit `mcp-providers/custom-components.mjs`
-- Implement actual storage (database, file system, etc.)
-- Add your component library logic
+- **File**: `mcp-providers/custom-components.mjs`
+- **Status**: ⏳ Placeholder - implement actual storage (database, file system, etc.)
 
 ### Environment Variables
 
@@ -247,9 +271,20 @@ The server uses a modular architecture, making it easy to add new MCP providers:
 railway-mcp-test/
 ├── server.mjs                    # Main unified MCP server
 ├── mcp-providers/                # Modular MCP provider modules
-│   ├── magic-ui.mjs             # Magic UI MCP provider
-│   ├── shadcn.mjs               # Shadcn UI MCP provider
-│   └── custom-components.mjs     # Custom components provider
+│   ├── magic-ui.mjs             # Magic UI provider (68 components)
+│   ├── shadcn.mjs               # Shadcn UI provider (59 components)
+│   ├── aceternity-ui.mjs        # Aceternity UI provider (96 components)
+│   ├── eightbit.mjs             # 8bitcn provider (55 components)
+│   ├── brand-system.mjs         # Brand System/Design API provider
+│   ├── ai-router.mjs            # AI Router provider (n8n webhooks)
+│   └── custom-components.mjs    # Custom components provider
+├── design-tokens/                # Design token JSON files
+│   ├── colors.json              # Color palettes (default, rpg_8bit)
+│   ├── spacing.json             # Spacing scales
+│   ├── typography.json          # Typography systems
+│   ├── radii.json               # Border radii
+│   ├── shadows.json             # Shadow values
+│   └── themes.json              # Theme configurations
 ├── package.json                 # Dependencies and scripts
 ├── railway.json                 # Railway deployment configuration
 ├── .gitignore                   # Git ignore rules
@@ -258,11 +293,35 @@ railway-mcp-test/
 
 ### Architecture
 
-The server uses a **modular provider architecture**:
+The server uses a **modular provider architecture** with **decoupled AI**:
+
+**Provider Pattern:**
 - Each MCP server is a separate module in `mcp-providers/`
 - The main server (`server.mjs`) merges all providers
 - Tools and resources from all providers are unified into single endpoints
 - Easy to add new providers without modifying core server code
+
+**Decoupled AI Architecture:**
+- All AI operations route through n8n webhooks
+- Lovable → Edge Function → n8n Webhook → LLM + Tools → Return
+- **No direct LLM API calls** from Lovable
+- Centralized AI orchestration and cost control
+
+**Component Context Enhancement:**
+- All 278 components include rich metadata:
+  - `useCases` - Common use cases
+  - `commonPatterns` - Usage patterns
+  - `whenToUse` / `whenNotToUse` - Guidance
+  - `examples` - Code examples
+  - `relatedComponents` - Related components
+- Search functions search through all metadata fields
+- `get_component_context` tools provide detailed component information
+
+**Design System API:**
+- Complete Brand System with nested property access
+- Multi-theme support (default, rpg_8bit)
+- Token validation and helpful error messages
+- Automatic token discovery and suggestions
 
 ## 🔒 Security Notes
 
@@ -271,15 +330,35 @@ The server uses a **modular provider architecture**:
 - Add authentication if needed for sensitive operations
 - Consider rate limiting for public endpoints
 
+## ✨ Features
+
+### Component Libraries
+- ✅ **278 Total Components** across 4 libraries
+- ✅ **Rich Context Metadata** for all components (use cases, patterns, examples)
+- ✅ **Enhanced Search** across metadata fields
+- ✅ **Component Context Tools** for detailed component information
+
+### Design System API (Brand System)
+- ✅ **Nested Property Access** - `primary.500`, `fontSizes.base`
+- ✅ **Token Validation** - Validates color formats and CSS values
+- ✅ **Helpful Error Messages** - Suggests similar tokens on errors
+- ✅ **Multi-Theme Support** - `default` and `rpg_8bit` themes
+- ✅ **10 Tools** for complete design token access
+
+### Architecture
+- ✅ **Decoupled AI** - All AI operations via n8n webhooks
+- ✅ **Modular Providers** - Easy to add new providers
+- ✅ **Unified Endpoints** - Single connection for all providers
+
 ## 📝 Next Steps
 
-1. **Integrate Magic UI's actual component library** - Currently uses placeholders
-2. **Integrate Shadcn UI's actual component library** - Currently uses placeholders
-3. **Implement persistent storage** for custom components (database or file system)
-4. **Add more MCP providers** - Extend with other component libraries or tools
-5. **Add authentication** if you need to restrict access
-6. **Add logging and monitoring** for production use
-7. **Set up component caching** for better performance
+1. **Configure n8n Webhooks** - Set up AI Router provider with actual n8n webhook URLs
+2. **Implement Custom Components Storage** - Add database or file system for custom components
+3. **Add More Providers** - Extend with other component libraries or tools
+4. **Add Authentication** - If you need to restrict access
+5. **Add Logging/Monitoring** - For production use
+6. **Set up Component Caching** - For better performance
+7. **Integrate Component Code APIs** - Connect to actual Magic UI/Shadcn APIs for code retrieval
 
 ## 🆘 Troubleshooting
 
