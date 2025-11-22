@@ -54,22 +54,59 @@ The server will run on `http://localhost:4001` (or the port specified in `PORT` 
 
 ## 🔌 Connecting to Lovable
 
-1. **Get your Railway server URL** (e.g., `https://your-app.railway.app`)
+### Step-by-Step Configuration
 
-2. **In Lovable, configure the MCP server:**
-   - Go to your Lovable project settings
-   - Find the MCP/External Services section
-   - Add a new MCP server with:
-     - **URL**: Your Railway server URL (e.g., `https://your-app.railway.app`)
-     - **Type**: HTTP
-     - **Endpoints**: 
-       - Initialize: `/mcp/initialize`
-       - Tools: `/mcp/tools/list` and `/mcp/tools/call`
-       - Resources: `/mcp/resources/list` and `/mcp/resources/read`
+1. **Get your Railway server URL**
+   - Your URL: `https://design-api-mcp-production.up.railway.app`
 
-3. **Test the connection:**
-   - Use the health check endpoint: `https://your-app.railway.app/health`
-   - Should return: `{"status":"ok","service":"mcp-server"}`
+2. **In Lovable, go to MCP/External Services:**
+   - Navigate to your Lovable project
+   - Go to **Settings** → **MCP Servers** or **External Services**
+   - Click **Add MCP Server** or **Add External Service**
+
+3. **Fill in the connection details:**
+
+   **Basic Settings:**
+   - **Server Name**: `Design API MCP Server` (or any name you prefer)
+   - **Server URL**: `https://design-api-mcp-production.up.railway.app`
+   - **Connection Type**: Select `HTTP` or `MCP`
+
+   **MCP Endpoints** (if prompted separately):
+   - **Initialize**: `/mcp/initialize`
+   - **List Tools**: `/mcp/tools/list`
+   - **Call Tool**: `/mcp/tools/call`
+   - **List Resources**: `/mcp/resources/list`
+   - **Read Resource**: `/mcp/resources/read`
+
+   **OAuth2 Settings** (if required):
+   - **OAuth Client ID**: `lovable-client` (or any value - our server accepts any)
+   - **OAuth Client Secret**: `lovable-secret` (or any value - our server accepts any)
+   - **Authorization URL**: `https://design-api-mcp-production.up.railway.app/oauth2/authorize`
+   - **Token URL**: `https://design-api-mcp-production.up.railway.app/oauth2/token`
+   - **Scopes**: `mcp:read mcp:write` (or leave blank)
+
+4. **Save and Test:**
+   - Click **Save** or **Connect**
+   - Lovable should now connect to your MCP server
+   - You should see all 35 tools available
+
+### Quick Test
+
+Test the connection manually:
+```bash
+# Health check
+curl https://design-api-mcp-production.up.railway.app/health
+
+# Should return: {"status":"ok","service":"mcp-server"}
+```
+
+### Troubleshooting
+
+If you still get OAuth errors:
+1. **Wait 2-3 minutes** after Railway redeploys
+2. **Check Railway logs** to ensure the server is running
+3. **Try the discovery endpoint**: `https://design-api-mcp-production.up.railway.app/.well-known/oauth-authorization-server`
+4. **Verify endpoints** are accessible (no 404 errors)
 
 ## 📡 API Endpoints
 

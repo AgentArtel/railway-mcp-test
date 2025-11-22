@@ -323,7 +323,9 @@ app.get("/health", (req, res) => {
 
 // OAuth2 Discovery endpoint (RFC 8414)
 app.get("/.well-known/oauth-authorization-server", (req, res) => {
-  const baseUrl = req.protocol + '://' + req.get('host');
+  // Use HTTPS if available (Railway provides it)
+  const protocol = req.get('x-forwarded-proto') || req.protocol || 'https';
+  const baseUrl = `${protocol}://${req.get('host')}`;
   res.json({
     issuer: baseUrl,
     authorization_endpoint: `${baseUrl}/oauth2/authorize`,
