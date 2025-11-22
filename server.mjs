@@ -58,6 +58,15 @@ app.use(express.json());
 // Support URL-encoded form data for OAuth2 token endpoint
 app.use(express.urlencoded({ extended: true }));
 
+// Request logging middleware (for debugging)
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log('Body:', JSON.stringify(req.body).substring(0, 200));
+  }
+  next();
+});
+
 // MCP Protocol Implementation
 // This follows the Model Context Protocol specification
 // Unified server that merges multiple MCP providers
