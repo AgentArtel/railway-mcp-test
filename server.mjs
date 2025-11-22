@@ -189,6 +189,33 @@ app.post("/oauth2/token", (req, res) => {
   }
 });
 
+// Alternative endpoint paths (some MCP clients use paths without /mcp/ prefix)
+app.post("/initialize", (req, res) => {
+  // Forward to /mcp/initialize handler
+  req.url = '/mcp/initialize';
+  return app._router.handle(req, res, () => {});
+});
+
+app.post("/tools/list", (req, res) => {
+  req.url = '/mcp/tools/list';
+  return app._router.handle(req, res, () => {});
+});
+
+app.post("/tools/call", (req, res) => {
+  req.url = '/mcp/tools/call';
+  return app._router.handle(req, res, () => {});
+});
+
+app.post("/resources/list", (req, res) => {
+  req.url = '/mcp/resources/list';
+  return app._router.handle(req, res, () => {});
+});
+
+app.post("/resources/read", (req, res) => {
+  req.url = '/mcp/resources/read';
+  return app._router.handle(req, res, () => {});
+});
+
 // List available tools - merges tools from all providers
 app.post("/mcp/tools/list", (req, res) => {
   // Bearer token is optional - if provided, we accept it
