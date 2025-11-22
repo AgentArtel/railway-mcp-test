@@ -80,8 +80,8 @@ function getBearerToken(req) {
   return null;
 }
 
-// Initialize endpoint - called when client connects
-app.post("/mcp/initialize", (req, res) => {
+// Initialize handler function (shared by both /mcp/initialize and /initialize)
+function handleInitialize(req, res) {
   const { protocolVersion, capabilities, clientInfo } = req.body;
   
   // Check if Bearer token is provided (alternative to OAuth)
@@ -130,7 +130,12 @@ app.post("/mcp/initialize", (req, res) => {
     },
     authentication: authResponse
   });
-});
+}
+
+// Initialize endpoint - called when client connects
+app.post("/mcp/initialize", handleInitialize);
+// Alternative path without /mcp/ prefix
+app.post("/initialize", handleInitialize);
 
 // OAuth2 Authorization endpoint (simplified - for Lovable compatibility)
 app.get("/oauth2/authorize", (req, res) => {
@@ -189,35 +194,8 @@ app.post("/oauth2/token", (req, res) => {
   }
 });
 
-// Alternative endpoint paths (some MCP clients use paths without /mcp/ prefix)
-app.post("/initialize", (req, res) => {
-  // Forward to /mcp/initialize handler
-  req.url = '/mcp/initialize';
-  return app._router.handle(req, res, () => {});
-});
-
-app.post("/tools/list", (req, res) => {
-  req.url = '/mcp/tools/list';
-  return app._router.handle(req, res, () => {});
-});
-
-app.post("/tools/call", (req, res) => {
-  req.url = '/mcp/tools/call';
-  return app._router.handle(req, res, () => {});
-});
-
-app.post("/resources/list", (req, res) => {
-  req.url = '/mcp/resources/list';
-  return app._router.handle(req, res, () => {});
-});
-
-app.post("/resources/read", (req, res) => {
-  req.url = '/mcp/resources/read';
-  return app._router.handle(req, res, () => {});
-});
-
-// List available tools - merges tools from all providers
-app.post("/mcp/tools/list", (req, res) => {
+// List available tools handler (shared)
+function handleToolsList(req, res) {
   // Bearer token is optional - if provided, we accept it
   const bearerToken = getBearerToken(req);
   // (In production, you'd validate the token here)
@@ -236,10 +214,15 @@ app.post("/mcp/tools/list", (req, res) => {
   res.json({
     tools: allTools
   });
-});
+}
 
-// Call a specific tool - routes to appropriate provider
-app.post("/mcp/tools/call", async (req, res) => {
+// List available tools - merges tools from all providers
+app.post("/mcp/tools/list", handleToolsList);
+// Alternative path
+app.post("/tools/list", handleToolsList);
+
+// Call a specific tool handler (shared)
+async function handleToolsCall(req, res) {
   const { name, arguments: args } = req.body;
   
   try {
@@ -476,6 +459,92 @@ app.get("/", (req, res) => {
       readResource: "POST /mcp/resources/read"
     }
   });
+});
+
+// Alternative endpoint paths (some MCP clients use paths without /mcp/ prefix)
+// These duplicate the handlers above for compatibility
+app.post("/initialize", handleInitialize);
+app.post("/tools/list", handleToolsList);
+app.post("/tools/call", handleToolsCall);
+app.post("/resources/list", (req, res) => {
+  // Merge resources from all MCP providers
+  const allResources = [
+    ...magicUIResources,
+    ...shadcnResources,
+    ...customComponentResources,
+    ...aiRouterResources,
+    ...brandSystemResources,
+    ...aceternityUIResources,
+    ...eightbitResources
+  ];
+  
+  res.json({
+    resources: allResources
+  });
+});
+app.post("/resources/read", async (req, res) => {
+  const { uri } = req.body;
+  
+  try {
+    let result;
+    
+    // Try AI Router provider first
+    result = await handleAIRouterResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try Brand System provider
+    result = await handleBrandSystemResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try Magic UI provider
+    result = await handleMagicUIResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try Shadcn UI provider
+    result = await handleShadcnResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try Aceternity UI provider
+    result = await handleAceternityUIResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try 8bitcn provider
+    result = await handleEightbitResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    // Try custom components provider
+    result = await handleCustomComponentResource(uri);
+    if (result) {
+      return res.json(result);
+    }
+    
+    return res.status(404).json({
+      error: {
+        code: -32601,
+        message: `Resource not found: ${uri}`
+      }
+    });
+  } catch (error) {
+    console.error(`Error reading resource ${uri}:`, error);
+    return res.status(500).json({
+      error: {
+        code: -32603,
+        message: error.message
+      }
+    });
+  }
 });
 
 // 404 handler for undefined routes
